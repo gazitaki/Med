@@ -497,7 +497,7 @@ body{
 .installBannerText{ flex:1; font-size:11px; color:#ccc; }
 .installBannerText b{ display:block; font-size:12px; color:white; }
 .installBannerBtn{ background:var(--gold); color:white; border:none; border-radius:8px; padding:6px 12px; font-size:11px; font-weight:700; cursor:pointer; flex-shrink:0; font-family:'DM Sans',sans-serif; }
-.installBannerClose{ background:transparent; border:none; color:#666; font-size:18px; cursor:pointer; flex-shrink:0; line-height:1; }
+  .installBannerClose{ background:transparent; border:none; color:#666; font-size:18px; cursor:pointer; flex-shrink:0; line-height:1; }
 
 .installPopup{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:400; justify-content:flex-end; align-items:flex-end; }
 .installPopup.show{ display:flex; }
@@ -513,6 +513,68 @@ body{
 .installStepText{ font-size:13px; color:#333; line-height:1.5; }
 .installStepText b{ color:#111; }
 .installCloseBtn{ width:100%; padding:14px; background:#1a1a1a; color:white; border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
+
+/* SIPARIŞ TAKIP - HAMBURGER */
+.trackBtn{background:none;border:none;font-size:22px;color:var(--gold);cursor:pointer;padding:6px 8px;line-height:1}
+.trackOverlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9998;display:none}
+.trackOverlay.show{display:block}
+.trackPanel{position:fixed;top:0;left:0;width:88%;max-width:360px;height:100vh;background:var(--bg2);z-index:9999;transform:translateX(-100%);transition:transform .28s;overflow-y:auto;box-shadow:2px 0 16px rgba(0,0,0,.2)}
+.trackPanel.show{transform:translateX(0)}
+.trackHead{padding:18px 16px;background:var(--gold);color:#fff;display:flex;justify-content:space-between;align-items:center}
+.trackHeadTitle{font-size:16px;font-weight:800}
+.trackClose{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1}
+.trackSearch{padding:14px 16px;border-bottom:1px solid var(--border)}
+.trackSearch input{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:9px;font-size:14px;box-sizing:border-box;background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif}
+.trackSearchBtn{width:100%;margin-top:8px;padding:11px;background:var(--gold);color:#fff;border:none;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.trackListTitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gray);padding:14px 16px 6px}
+.trackList{padding:0 12px 20px}
+.trackCard{background:var(--bg);border:1px solid var(--border);border-radius:11px;margin-bottom:10px;overflow:hidden}
+.trackCard.upd{border-left:4px solid #e0a458}
+.trackCardHead{padding:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.trackNo{font-size:13px;font-weight:800;color:var(--white)}
+.trackUpdBadge{display:inline-block;background:#ffe9c7;color:#b5651d;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;margin-left:5px}
+.trackStatus{font-size:11px;margin-top:3px;font-weight:600}
+.trackArrow{font-size:12px;color:var(--gray);transition:transform .25s}
+.trackArrow.open{transform:rotate(180deg)}
+.trackBody{display:none;padding:0 12px 12px;border-top:1px solid var(--border)}
+.trackBody.show{display:block}
+.trackItem{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
+.trackItem:last-child{border-bottom:none}
+.trackItem img{width:42px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--bg3)}
+.trackItemInfo{flex:1;font-size:12px}
+.trackItemName{font-weight:700;color:var(--white)}
+.trackItemMeta{color:var(--gray);font-size:11px;margin-top:2px}
+.trackItemMeta.changed{color:#b5651d;font-weight:700}
+.trackItemOld{text-decoration:line-through;color:#c0392b}
+.trackHazir{color:#1e8449;font-weight:700}
+.trackEmpty{text-align:center;color:var(--gray);font-size:13px;padding:30px 16px}
+.trackStatusRow{padding:10px 0 2px;font-size:12px;font-weight:700;color:var(--gold);border-top:1px solid var(--border);margin-top:4px}
+
+.copyCodeBtn{
+  margin-top:10px;
+  background:var(--gold);
+  color:#fff;
+  border:none;
+  border-radius:9px;
+  padding:9px 18px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+.copyCodeBtn.copied{ background:#1e8449; }
+
+.thankRemind{
+  font-size:12.5px;
+  color:var(--white);
+  background:#fdf3dc;
+  border:1px solid #f0dca8;
+  border-radius:10px;
+  padding:11px 16px;
+  margin:0 0 18px;
+  line-height:1.5;
+  max-width:300px;
+}
 
 </style>
 </head>
@@ -550,6 +612,7 @@ body{
 </div>
 
 <div class="header">
+  <button class="trackBtn" onclick="openTrack()" aria-label="Siparişlerim">☰</button>
   <div class="logo">MED BİJUTERİ</div>
   <button class="cartBtn" onclick="openCart()">
     🛍 Sepet
@@ -614,7 +677,9 @@ body{
   <div class="thankCode">
     Sipariş Kodunuz
     <b id="thankCode">—</b>
+    <button class="copyCodeBtn" id="copyCodeBtn" onclick="copyOrderCode()">📋 Kodu Kopyala</button>
   </div>
+  <div class="thankRemind">📌 <b>Bu kodu not alın!</b> Siparişinizi ☰ menüden takip edebilir, ürünleriniz elinize ulaşınca listeyle karşılaştırabilirsiniz. 💛</div>
   <button class="thankBtn" onclick="closeThank()">🛍 Alışverişe Devam Et</button>
 </div>
 
@@ -650,7 +715,7 @@ let sunucuSaati = null;
 db.collection("_serverTime").doc("now").set({ t: firebase.firestore.FieldValue.serverTimestamp() })
   .then(function(){ return db.collection("_serverTime").doc("now").get(); })
   .then(function(doc){ sunucuSaati = doc.data()&&doc.data().t ? doc.data().t.toDate() : new Date(); })
-  .catch(function(){ sunucuSaati = new Date(); });
+    .catch(function(){ sunucuSaati = new Date(); });
 
 function img(url, type){
   type = type || "vitrin";
@@ -962,7 +1027,7 @@ function openCart(){
   updateCartUI();
   document.getElementById("cartPanel").classList.add("open");
   document.getElementById("overlay").classList.add("show");
-}
+  }
 
 function closeCart(){
   document.getElementById("cartPanel").classList.remove("open");
@@ -1010,6 +1075,13 @@ async function sendOrder(){
 
   try{
     await saveOrder(order);
+    // Cihaza kaydet (son 5 sipariş)
+    try{
+      var kayitli = JSON.parse(localStorage.getItem("medSiparislerim") || "[]");
+      kayitli.unshift({ id: orderId, date: order.date });
+      if(kayitli.length > 5) kayitli = kayitli.slice(0, 5);
+      localStorage.setItem("medSiparislerim", JSON.stringify(kayitli));
+    }catch(err){ console.log("localStorage hata:", err); }
   }catch(e){
     console.error("Sipariş kaydedilemedi:", e);
     alert("Bir hata oluştu, tekrar deneyin.");
@@ -1025,6 +1097,7 @@ async function sendOrder(){
     totalPrice+=p.qty*p.fiyat;
   });
   msg+=`💰 TOPLAM: ${totalPrice}₺`;
+  msg+=`\n\n📌 Sipariş kodunuz: ${orderId}\nBu kodu saklayın 💛 Siparişinizi sitemizdeki ☰ menüden takip edebilir, ürünleriniz ulaşınca kontrol edebilirsiniz.`;
 
   document.getElementById("thankCode").innerText=orderId;
   document.getElementById("thankModal").classList.add("show");
@@ -1050,6 +1123,145 @@ function closeThank(){
   document.getElementById("thankModal").classList.remove("show");
   window.location.reload();
 }
+
+function copyOrderCode(){
+  var code = document.getElementById("thankCode").innerText;
+  var btn = document.getElementById("copyCodeBtn");
+  function ok(){
+    btn.innerText = "✓ Kopyalandı";
+    btn.classList.add("copied");
+    setTimeout(function(){ btn.innerText = "📋 Kodu Kopyala"; btn.classList.remove("copied"); }, 2000);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code).then(ok).catch(function(){ fallbackCopy(code, ok); });
+  } else {
+    fallbackCopy(code, ok);
+  }
+}
+function fallbackCopy(text, cb){
+  try{
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    cb();
+  }catch(e){ alert("Kod: " + text); }
+}
+
+// ============ SIPARIŞ TAKIP ============
+function openTrack(){
+  document.getElementById("trackPanel").classList.add("show");
+  document.getElementById("trackOverlay").classList.add("show");
+  renderTrackList();
+}
+function closeTrack(){
+  document.getElementById("trackPanel").classList.remove("show");
+  document.getElementById("trackOverlay").classList.remove("show");
+}
+
+function getKayitliSiparisler(){
+  try{ return JSON.parse(localStorage.getItem("medSiparislerim") || "[]"); }
+  catch(e){ return []; }
+}
+
+function statusLabel(s){
+  if(s==="yeni") return ["🟠 Hazırlanıyor","#e67e22"];
+  if(s==="odeme") return ["🟡 Ödeme bekleniyor","#f39c12"];
+  if(s==="kargo") return ["🚚 Kargoya verildi","#2980b9"];
+  if(s==="arsiv") return ["✅ Tamamlandı","#1e8449"];
+  return ["🟠 Hazırlanıyor","#e67e22"];
+}
+
+function renderTrackList(){
+  var kayitli = getKayitliSiparisler();
+  var listEl = document.getElementById("trackList");
+  document.querySelector(".trackListTitle").textContent = "Bu cihazdaki siparişler";
+  if(!kayitli.length){
+    listEl.innerHTML = '<div class="trackEmpty">Bu cihazdan henüz sipariş vermediniz.<br><br>Sipariş kodunuz varsa yukarıdan sorgulayabilirsiniz.</div>';
+    return;
+  }
+  listEl.innerHTML = '<div class="trackEmpty">Yükleniyor…</div>';
+  var promises = kayitli.map(function(k){
+    return db.collection("orders").where("id","==",k.id).get()
+      .then(function(snap){ return snap.empty ? null : snap.docs[0].data(); })
+      .catch(function(){ return null; });
+  });
+  Promise.all(promises).then(function(orders){
+    var valid = orders.filter(function(o){ return o; });
+    if(!valid.length){
+      listEl.innerHTML = '<div class="trackEmpty">Siparişler bulunamadı.</div>';
+      return;
+    }
+    listEl.innerHTML = valid.map(buildTrackCard).join("");
+  });
+}
+
+function trackByCode(){
+  var code = document.getElementById("trackCodeInput").value.trim().toUpperCase();
+  if(!code){ alert("Lütfen sipariş kodunu girin."); return; }
+  if(code.indexOf("ORD") === -1 && /^\d+$/.test(code)) code = "ORD-" + code;
+  var listEl = document.getElementById("trackList");
+  document.querySelector(".trackListTitle").textContent = "Sorgu sonucu";
+  listEl.innerHTML = '<div class="trackEmpty">Aranıyor…</div>';
+  db.collection("orders").where("id","==",code).get().then(function(snap){
+    if(snap.empty){
+      listEl.innerHTML = '<div class="trackEmpty">"'+code+'" kodlu sipariş bulunamadı.<br>Kodu kontrol edin.</div>';
+      return;
+    }
+    listEl.innerHTML = buildTrackCard(snap.docs[0].data());
+  }).catch(function(){
+    listEl.innerHTML = '<div class="trackEmpty">Bir hata oluştu, tekrar deneyin.</div>';
+  });
+}
+
+function buildTrackCard(o){
+  var sl = statusLabel(o.status);
+  var upd = o.updated === true;
+  var items = o.items || [];
+  var total = 0;
+  var h = '<div class="trackCard '+(upd?"upd":"")+'">';
+  h += '<div class="trackCardHead" onclick="toggleTrackCard(this)">';
+  h += '<div><div class="trackNo">'+(o.id||"")+(upd?'<span class="trackUpdBadge">⚠️ DEĞİŞTİ</span>':'')+'</div>';
+  h += '<div class="trackStatus" style="color:'+sl[1]+'">'+sl[0]+'</div></div>';
+  h += '<div class="trackArrow">▼</div></div>';
+  h += '<div class="trackBody">';
+  items.forEach(function(it){
+    var q = it.qty || it.adet || 1;
+    total += q * (it.fiyat||0);
+    var ch = it.changes && it.changes.length > 0;
+    var lch = ch ? it.changes[it.changes.length-1] : null;
+    var hazir = it.hazir === true;
+    var stok = it.stokDurumu || "";
+    h += '<div class="trackItem">';
+    h += '<img src="'+(it.resim||"")+'" onerror="this.style.visibility=\'hidden\'">';
+    h += '<div class="trackItemInfo"><div class="trackItemName">'+(hazir?'✓ ':'')+(it.ad||"Ürün")+'</div>';
+    if(stok === "tukendi"){
+      h += '<div class="trackItemMeta" style="color:#c0392b;font-weight:700">❌ Tükendi — sizinle iletişime geçeceğiz</div>';
+    } else if(stok === "eksik"){
+      h += '<div class="trackItemMeta" style="color:#b5651d;font-weight:700">⚠️ Stok azaldı: '+(it.kalanStok||0)+' / '+q+' adet</div>';
+    } else if(ch && lch){
+      h += '<div class="trackItemMeta changed"><span class="trackItemOld">'+lch.oldQty+' adet</span> → '+q+' adet';
+      h += ' <span style="font-weight:600">(stok değişti)</span></div>';
+    } else {
+      h += '<div class="trackItemMeta">'+q+' adet × '+(it.fiyat||0)+'₺';
+      if(hazir) h += ' · <span class="trackHazir">hazır ✓</span>';
+      h += '</div>';
+    }
+    h += '</div></div>';
+  });
+  h += '<div class="trackStatusRow">Toplam: '+total+'₺ · Durum: '+sl[0]+'</div>';
+  h += '</div></div>';
+  return h;
+}
+
+function toggleTrackCard(el){
+  var body = el.parentElement.querySelector(".trackBody");
+  var arrow = el.querySelector(".trackArrow");
+  body.classList.toggle("show");
+  arrow.classList.toggle("open");
+}
+// ============ /SIPARIŞ TAKIP ============
 
 let zScale=1, zStartDist=0, zLastScale=1;
 
@@ -1139,5 +1351,22 @@ loadData();
 setInterval(loadData, 30000);
 
 </script>
+<!-- SIPARIŞ TAKIP PANELI -->
+<div class="trackOverlay" id="trackOverlay" onclick="closeTrack()"></div>
+<div class="trackPanel" id="trackPanel">
+  <div class="trackHead">
+    <span class="trackHeadTitle">📦 Siparişlerim</span>
+    <button class="trackClose" onclick="closeTrack()">×</button>
+  </div>
+  <div class="trackSearch">
+    <input id="trackCodeInput" placeholder="Sipariş kodu (örn: ORD-12345)" />
+    <button class="trackSearchBtn" onclick="trackByCode()">🔍 Kodla Sorgula</button>
+  </div>
+  <div class="trackListTitle">Bu cihazdaki siparişler</div>
+  <div class="trackList" id="trackList">
+    <div class="trackEmpty">Yükleniyor…</div>
+  </div>
+</div>
+
 </body>
 </html>
